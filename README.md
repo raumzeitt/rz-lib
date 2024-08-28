@@ -1,6 +1,6 @@
 # rz-lib
-A collection of commonly used RTL modules and verification modules
+A collection of commonly used RTL and verification modules
 
-**```spi:```** Single-clock SPI interface  
-**```fifo:```** Collection of FIFO designs  
-**```bram:```** Collection of inferrable RAM models for FPGA technologies 
+**```rtl/spi:```** Single-clock SPI interface  
+**```rtl/fifo:```** Collection of FIFO designs  
+**```rtl/bram:```** Collection of inferrable RAM models for FPGA technologies 
