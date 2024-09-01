@@ -55,7 +55,7 @@ class SpiTransactor:
                 data = [0]
         except TypeError:
             data = [data]
-        self.log.debug(f"SPI WRITE: ADDRESS=0x{address:02x} DATA={[hex(i) for i in data]} ")
+        self.log.info(f"SPI WRITE: ADDRESS=0x{address:02x} DATA={[hex(i) for i in data]} ")
         await self.source.write([address] + data, burst=True)
         _ = await self.source.read() # flush read queue
 
@@ -64,37 +64,8 @@ class SpiTransactor:
         await self.source.write([address] + [0]*n, burst=True)
         read_bytes = await self.source.read()
         read_bytes = read_bytes[1:]
-        self.log.debug(f"SPI READ: ADDRESS=0x{address:02x} DATA={[hex(i) for i in read_bytes]} ")
+        self.log.info(f"SPI READ:  ADDRESS=0x{address:02x} DATA={[hex(i) for i in read_bytes]} ")
         return read_bytes
-
-
-class DeviceRegs:
-    def __init__(self, dut):
-        self.dut = dut
-        self.log = logging.getLogger("SPI Device Registers")
-        self.log.setLevel(self.dut._log.level)
-
-        self.regs = [0]*256
-        # start processes
-        cocotb.start_soon(self.write_reg())
-        cocotb.start_soon(self.read_reg())
-        
-    async def write_reg(self):
-        while True:
-            await FallingEdge(self.dut.spi_clock_in)
-            if self.dut.data_wr_en.value and self.dut.address_out.value.integer < 128:
-                a = self.dut.address_out.value + self.dut.wr_byte_count.value
-                self.regs[a & 0x7f] = self.dut.wr_data.value.integer
-                self.log.debug(f"REG WRITE: ADDRESS=0x{a:02x} DATA=0x{self.regs[a]:02x} ")
-                    
-    async def read_reg(self):
-        while True:
-            await First(Edge(self.dut.data_rd_en), Edge(self.dut.address_out), Edge(self.dut.rd_byte_count))
-            a = self.dut.address_out.value + self.dut.rd_byte_count.value
-            r = self.regs[a & 0x7f]
-            self.dut.rd_data.value = r
-            if self.dut.data_rd_en.value and self.dut.address_out.value.integer > 127:
-                self.log.debug(f"REG READ: ADDRESS=0x{a:02x} DATA=0x{r:02x} ")
 
 
 @cocotb.test()
@@ -109,7 +80,6 @@ async def spi_test(dut):
 
     # Transactor
     t = SpiTransactor(dut)
-    r = DeviceRegs(dut)
 
     # 5 us reset
     cr = cocotb.start_soon(clock_n_reset(None, dut.reset_n_in, t=5))       
