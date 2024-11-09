@@ -1,3 +1,15 @@
+/*
+ * Authored by: Robert Metchev / Raumzeit Technologies (robert@raumzeit.co)
+ *
+ * CERN Open Hardware Licence Version 2 - Permissive
+ *
+ * Copyright (C) 2024 Robert Metchev
+ *
+ *
+ * Description: AXI-Stream FIFO, either sync or aync, and using inferrebale BRAM
+ *
+ */
+
 // clogb2() - $clog2() alternative
 //`include "clogb2.vh" 
 module axis_data_fifo_0 #(

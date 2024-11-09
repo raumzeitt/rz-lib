@@ -1,3 +1,15 @@
+/*
+ * Authored by: Robert Metchev / Raumzeit Technologies (robert@raumzeit.co)
+ *
+ * CERN Open Hardware Licence Version 2 - Permissive
+ *
+ * Copyright (C) 2024 Robert Metchev
+ *
+ *
+ * Description: Pipeline stage, either rigid, or bubble collapsing
+ *
+ */
+
 module pipe #(
 	parameter DW = 8,
 	parameter RIGID = 0

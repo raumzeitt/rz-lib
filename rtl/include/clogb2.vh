@@ -1,3 +1,15 @@
+/*
+ * Authored by: Robert Metchev / Raumzeit Technologies (robert@raumzeit.co)
+ *
+ * CERN Open Hardware Licence Version 2 - Permissive
+ *
+ * Copyright (C) 2024 Robert Metchev
+ *
+ *
+ * Description: Ceil(log2()) function in verilog , same as $clog2()
+ *
+ */
+
 `ifndef __CLOGB2_VH__
 `define __CLOGB2_VH__
 
