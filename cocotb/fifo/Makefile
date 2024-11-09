@@ -16,27 +16,18 @@ TOPLEVEL_LANG ?= verilog
 
 WAVES = 1
 
+# FIFO: SFIFO or AFIFO
 FIFO ?= SFIFO
 export FIFO := $(FIFO)
 
 VERILOG_SOURCES += \
         $(realpath ../../rtl/fifo/axis_data_fifo_0.sv) \
+        $(realpath ../../rtl/fifo/afifo.v) \
+        $(realpath ../../rtl/fifo/sfifo.sv) \
         $(realpath ../../rtl/fifo/pipe.sv) \
         $(realpath ../../rtl/bram/dp_ram_be.sv)
 
-ifeq ($(FIFO),SFIFO)
-        VERILOG_SOURCES += $(realpath ../../rtl/fifo/sfifo.sv)
-endif
-
-ifeq ($(FIFO),AFIFO)
-        VERILOG_SOURCES += $(realpath ../../rtl/fifo/afifo.v)
-endif
-
 VERILOG_INCLUDE_DIRS += $(realpath ../../rtl/include)
-
-#e:
-#	echo $(VERILOG_SOURCES)	
-#	echo $(FIFO)	
 
 ifeq ($(SIM),icarus)
         COMPILE_ARGS += -DAXIS_DATA_FIFO_0_$(FIFO)
