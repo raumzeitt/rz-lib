@@ -11,3 +11,5 @@ A collection of commonly used RTL and verification modules
 - ```rtl/bram```: Collection of inferrable RAM models for FPGA technologies 
     - ```dp_ram```: Dual-port RAM model, infers a BRAM (Xilinx) or EBR (Lattice)
     - ```dp_ram_be```: Dual-port RAM model with byte enable, infers a BRAM (Xilinx) or EBR (Lattice)
+    - ```dp2_ram```: True dual-port RAM model, infers a BRAM (Xilinx)
+    - ```dp2_ram_be```: True dual-port RAM model with byte enable, infers a BRAM (Xilinx)
