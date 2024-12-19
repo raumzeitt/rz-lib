@@ -11,6 +11,7 @@ module spi (
     
     // To internal registers
     input logic [7:0] rd_data,
+    output logic address_valid,
     output logic [7:0] address_out,
     output logic [31:0] rd_byte_count,
     output logic [31:0] wr_byte_count,
@@ -21,7 +22,7 @@ module spi (
 
 logic                   spi_resetn;
 logic [3:0]             bit_index;
-logic [8:0]             shift_reg;
+logic [7:0]             shift_reg;
 
 always_comb  spi_resetn = reset_n_in & ~spi_select_in; // local reset
 always_comb  wr_data = shift_reg;
@@ -32,6 +33,7 @@ if (!spi_resetn) begin
     bit_index <= 15;
     rd_byte_count <= 0;
     wr_byte_count <= 0;
+    address_valid <= 0;
     data_wr_en <= 0;
     data_rd_en <= 0;
 end else begin
@@ -41,7 +43,8 @@ end else begin
         rd_byte_count <= rd_byte_count + 1;
     end
     else
-        bit_index <= bit_index - 1;
+    bit_index <= bit_index - 1;
+    address_valid <= bit_index == 8;
     data_wr_en <= bit_index == 0;
     data_rd_en <= bit_index == 1;
     if(data_wr_en)
