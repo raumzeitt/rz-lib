@@ -4,7 +4,7 @@
  * Authored by: Rohit Rathnam / Silicon Witchery AB (rohit@siliconwitchery.com)
  *              Raj Nakarja / Brilliant Labs Limited (raj@brilliant.xyz)
  *
- * CERN Open Hardware Licence Version 2 - Permissive
+ * GPL-3.0 license
  *
  * Copyright © 2023 Brilliant Labs Limited
  */

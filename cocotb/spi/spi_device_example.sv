@@ -13,6 +13,7 @@ module spi_device_example (
 // To internal registers
 logic [7:0] rd_data;
 logic [7:0] address_out;
+logic address_valid;
 logic [31:0] rd_byte_count;
 logic [31:0] wr_byte_count;
 logic [7:0] wr_data;

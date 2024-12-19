@@ -1,59 +1,58 @@
 [*]
 [*] GTKWave Analyzer v3.3.104 (w)1999-2020 BSI
-[*] Mon Aug 26 04:00:39 2024
+[*] Thu Dec 19 07:44:46 2024
 [*]
 [dumpfile] "/home/rmetchev/workspace/rz-lib/cocotb/spi/dump.fst"
-[dumpfile_mtime] "Mon Aug 26 04:00:02 2024"
-[dumpfile_size] 2047
+[dumpfile_mtime] "Thu Dec 19 07:40:57 2024"
+[dumpfile_size] 9694
 [savefile] "/home/rmetchev/workspace/rz-lib/cocotb/spi/spi.gtkw"
 [timestart] 0
-[size] 1848 741
+[size] 1850 1016
 [pos] -1 -1
-*-24.076609 27631001 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-22.923832 19125001 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] .
+[treeopen] .spi_device_example.
 [sst_width] 233
 [signals_width] 182
 [sst_expanded] 1
-[sst_vpaned_height] 192
+[sst_vpaned_height] 385
 @200
 -
 -SPI bus
 @28
-spi.spi_clock_in
-spi.spi_data_in
-spi.spi_data_out
-spi.spi_select_in
+spi_device_example.spi.spi_clock_in
+spi_device_example.spi.spi_data_in
+spi_device_example.spi.spi_data_out
+spi_device_example.spi.spi_select_in
 @200
 -
 -Reset
 @28
-spi.reset_n_in
-spi.spi_resetn
-@22
-spi.bit_index[3:0]
+spi_device_example.spi.reset_n_in
+spi_device_example.spi.spi_resetn
 @200
 -
+-Address
+@22
+spi_device_example.spi.address_out[7:0]
+@28
+spi_device_example.spi.address_valid
+@200
 -
 -Write
 @22
-spi.address_out[7:0]
+spi_device_example.spi.wr_data[7:0]
+spi_device_example.spi.wr_byte_count[31:0]
 @28
-spi.data_wr_en
-@22
-spi.wr_data[7:0]
-spi.wr_byte_count[31:0]
+spi_device_example.spi.data_wr_en
 @200
--
 -
 -Read
 @22
-spi.address_out[7:0]
+spi_device_example.spi.rd_data[7:0]
+spi_device_example.spi.rd_byte_count[31:0]
 @28
-spi.data_rd_en
-@23
-spi.rd_data[7:0]
-@22
-spi.rd_byte_count[31:0]
+spi_device_example.spi.data_rd_en
 @200
 -
 [pattern_trace] 1

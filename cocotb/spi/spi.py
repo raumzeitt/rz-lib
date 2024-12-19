@@ -42,7 +42,7 @@ class SpiTransactor:
             cpol        = 0,
             cpha        = 0,
             msb_first   = True,
-            #frame_spacing_ns = 10,
+            frame_spacing_ns = 125,
             #ignore_rx_value = None,
             cs_active_low = True,   # optional (assumed True)
         )
@@ -59,13 +59,18 @@ class SpiTransactor:
         await self.source.write([address] + data, burst=True)
         _ = await self.source.read() # flush read queue
 
+    async def spi_command(self, address):
+        self.log.info(f"SPI COMMAND: ADDRESS=0x{address:02x}")
+        await self.source.write([address], burst=True)
+        _ = await self.source.read() # flush read queue
+
     async def spi_read(self, address, n=1):
         d = [address] + [0]*n
         await self.source.write([address] + [0]*n, burst=True)
         read_bytes = await self.source.read()
         read_bytes = read_bytes[1:]
         self.log.info(f"SPI READ:  ADDRESS=0x{address:02x} DATA={[hex(i) for i in read_bytes]} ")
-        return read_bytes
+        return [int(i) for i in read_bytes]
 
 
 @cocotb.test()
@@ -86,6 +91,11 @@ async def spi_test(dut):
     await RisingEdge(dut.reset_n_in)
     await Timer(1, 'us')
     
+    # test Command
+    await t.spi_command(0x14)
+    await t.spi_command(0x20)
+    await Timer(5, 'us')
+
     # test single byte write followed by byte read
     a = 0x7c
     d = [0x8e]
