@@ -22,6 +22,8 @@ export FIFO := $(FIFO)
 
 VERILOG_SOURCES += \
         $(realpath ../../rtl/fifo/axis_data_fifo_0.sv) \
+        $(realpath ../../rtl/fifo/axis_data_afifo_0.sv) \
+        $(realpath ../../rtl/fifo/axis_data_sfifo_0.sv) \
         $(realpath ../../rtl/fifo/afifo.v) \
         $(realpath ../../rtl/fifo/sfifo.sv) \
         $(realpath ../../rtl/fifo/pipe.sv) \
@@ -46,7 +48,16 @@ ifeq ($(SIM),verilator)
 endif
 
 # TOPLEVEL is the name of the toplevel module in your Verilog or VHDL file
-TOPLEVEL = axis_data_fifo_0
+ifeq ($(COMB_FIFO),1)
+        TOPLEVEL = axis_data_fifo_0
+else
+        ifeq ($(FIFO),SFIFO)
+                TOPLEVEL = axis_data_sfifo_0
+        endif
+        ifeq ($(FIFO),AFIFO)
+                TOPLEVEL = axis_data_afifo_0
+        endif
+endif
 
 # MODULE is the basename of the Python test file
 MODULE = axis_fifo
