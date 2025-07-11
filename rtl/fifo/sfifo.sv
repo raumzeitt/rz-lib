@@ -35,11 +35,19 @@ always_comb full = wptr[AW] != rptr[AW] & wptr[AW-1:0] == rptr[AW-1:0];
 always_comb empty = wptr == rptr;
 
 // write/read pointers
+`ifdef RZ_LIB_ASYNC_RESETN
+always @(posedge clk or negedge resetn)
+`else // RZ_LIB_ASYNC_RESETN
 always @(posedge clk) //sync reset
+`endif // RZ_LIB_ASYNC_RESETN
 if (!resetn) wptr <= 0;
 else if (we & ~full) wptr <= wptr + 1;
 
+`ifdef RZ_LIB_ASYNC_RESETN
+always @(posedge clk or negedge resetn)
+`else // RZ_LIB_ASYNC_RESETN
 always @(posedge clk) //sync reset
+`endif // RZ_LIB_ASYNC_RESETN
 if (!resetn) rptr <= 0;
 else if (re & ~empty) rptr <= rptr + 1;
 

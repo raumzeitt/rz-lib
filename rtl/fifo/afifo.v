@@ -101,7 +101,11 @@ module afifo(i_wclk, i_wrst_n, i_wr, i_wdata, o_wfull,
 	//
 	// Cross the read Gray pointer into the write clock domain
 	initial	{ wq2_rgray,  wq1_rgray } = 0;
-	always @(posedge i_wclk ) // or negedge i_wrst_n)
+`ifdef RZ_LIB_ASYNC_RESETN
+	always @(posedge i_wclk or negedge i_wrst_n)
+`else // RZ_LIB_ASYNC_RESETN
+	always @(posedge i_wclk)
+`endif // RZ_LIB_ASYNC_RESETN
 	if (!i_wrst_n)
 		{ wq2_rgray, wq1_rgray } <= 0;
 	else
@@ -119,7 +123,11 @@ module afifo(i_wclk, i_wrst_n, i_wr, i_wdata, o_wfull,
 	// Register these two values--the address and its Gray code
 	// representation
 	initial	{ wbin, wgray } = 0;
-	always @(posedge i_wclk ) // or negedge i_wrst_n)
+`ifdef RZ_LIB_ASYNC_RESETN
+	always @(posedge i_wclk or negedge i_wrst_n)
+`else // RZ_LIB_ASYNC_RESETN
+	always @(posedge i_wclk)
+`endif // RZ_LIB_ASYNC_RESETN
 	if (!i_wrst_n)
 		{ wbin, wgray } <= 0;
 	else
@@ -135,7 +143,11 @@ module afifo(i_wclk, i_wrst_n, i_wr, i_wdata, o_wfull,
 	// clock.
 	always_comb	o_wfull = wfull_next;
 	//initial	o_wfull = wfull_next;
-	//always @(posedge i_wclk ) // or negedge i_wrst_n)
+	//`ifdef RZ_LIB_ASYNC_RESETN
+	//always @(posedge i_wclk or negedge i_wrst_n)
+	//`else // RZ_LIB_ASYNC_RESETN
+	//always @(posedge i_wclk)
+	//`endif // RZ_LIB_ASYNC_RESETN
 	//if (!i_wrst_n)
 	//	o_wfull <= 1'b0;
 	//else
@@ -164,7 +176,11 @@ module afifo(i_wclk, i_wrst_n, i_wr, i_wdata, o_wfull,
 	//
 	// Cross the write Gray pointer into the read clock domain
 	initial	{ rq2_wgray,  rq1_wgray } = 0;
-	always @(posedge i_rclk ) // or negedge i_rrst_n)
+`ifdef RZ_LIB_ASYNC_RESETN
+	always @(posedge i_rclk or negedge i_rrst_n)
+`else // RZ_LIB_ASYNC_RESETN
+	always @(posedge i_rclk)
+`endif // RZ_LIB_ASYNC_RESETN
 	if (!i_rrst_n)
 		{ rq2_wgray, rq1_wgray } <= 0;
 	else
@@ -180,7 +196,11 @@ module afifo(i_wclk, i_wrst_n, i_wr, i_wdata, o_wfull,
 	// of it, on the next read clock
 	//
 	initial	{ rbin, rgray } = 0;
-	always @(posedge i_rclk ) // or negedge i_rrst_n)
+`ifdef RZ_LIB_ASYNC_RESETN
+	always @(posedge i_rclk or negedge i_rrst_n)
+`else // RZ_LIB_ASYNC_RESETN
+	always @(posedge i_rclk)
+`endif // RZ_LIB_ASYNC_RESETN
 	if (!i_rrst_n)
 		{ rbin, rgray } <= 0;
 	else
@@ -196,7 +216,11 @@ module afifo(i_wclk, i_wrst_n, i_wr, i_wdata, o_wfull,
 
 	always_comb o_rempty = rempty_next;
 	//initial o_rempty = 1;
-	//always @(posedge i_rclk ) // or negedge i_rrst_n)
+	//`ifdef RZ_LIB_ASYNC_RESETN
+	//always @(posedge i_rclk or negedge i_rrst_n)
+	//`else // RZ_LIB_ASYNC_RESETN
+	//always @(posedge i_rclk)
+	//`endif // RZ_LIB_ASYNC_RESETN
 	//if (!i_rrst_n)
 	//	o_rempty <= 1'b1;
 	//else

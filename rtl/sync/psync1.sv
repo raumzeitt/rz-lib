@@ -22,12 +22,20 @@ module psync1 (
 );
 
 logic p;
+`ifdef RZ_LIB_ASYNC_RESETN
+always @(posedge in_clk or negedge in_reset_n)
+`else // RZ_LIB_ASYNC_RESETN
 always @(posedge in_clk)
+`endif // RZ_LIB_ASYNC_RESETN
 if (!in_reset_n) p <= 0;
 else if (in) p <= ~p;
 
 logic [2:0] p_cdc;
+`ifdef RZ_LIB_ASYNC_RESETN
+always @(posedge out_clk or negedge out_reset_n)
+`else // RZ_LIB_ASYNC_RESETN
 always @(posedge out_clk)
+`endif // RZ_LIB_ASYNC_RESETN
 if (!out_reset_n) p_cdc <= 0;
 else p_cdc <= {p_cdc, p};
 
