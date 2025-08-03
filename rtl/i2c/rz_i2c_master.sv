@@ -38,7 +38,7 @@ module rz_i2c_master #(
     parameter integer unsigned CLOCK_STRETCHING_MAX_COUNT   = 'h1F, //set to 0 to disable, max number of divider ticks to wait during stretch check
     parameter integer unsigned CMD_FIFO_DEPTH = 2,
     parameter integer unsigned MISO_FIFO_DEPTH = 2,
-    parameter integer unsigned MOSI_FIFO_DEPTH = 2,
+    parameter integer unsigned MOSI_FIFO_DEPTH = 2
 )(
     input   logic               clock,
     input   logic               reset_n,
@@ -212,7 +212,7 @@ if (!reset_n) begin
     sda_out   <= 1;
     scl_out   <= 1;
     
-    post_state <= 'x;
+    post_state <= state_t'('x);
     process_counter <= 'x;
     bit_counter <= 'x;
     byte_counter <= 'x;
