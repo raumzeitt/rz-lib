@@ -32,12 +32,14 @@ VERILOG_SOURCES += \
 VERILOG_INCLUDE_DIRS += $(realpath ../../rtl/include)
 
 ifeq ($(SIM),icarus)
+        #COMPILE_ARGS += -DRZ_LIB_ASYNC_RESETN
         COMPILE_ARGS += -DAXIS_DATA_FIFO_0_$(FIFO)
         COMPILE_ARGS += -Wall
         COMPILE_ARGS += -v
         #COMPILE_ARGS += -g2005-sv
 endif
 ifeq ($(SIM),verilator)
+        #EXTRA_ARGS += +define+RZ_LIB_ASYNC_RESETN
         EXTRA_ARGS += +define+AXIS_DATA_FIFO_0_$(FIFO)
         EXTRA_ARGS += --timing
         ifneq ($(WAVES),0)
