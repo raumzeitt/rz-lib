@@ -204,6 +204,9 @@ else if (divider_tick && (state == S_READ_REG) && (process_counter == 2) && (bit
 else if (miso_ready) 
     miso_valid   <= 0;
 
+// workaround icarus issues
+wire [$bits(state_t)-1:0] S_X;
+assign S_X = 'x;
 
 //always_ff @(posedge clock) begin
 always_ff @(posedge clock or negedge reset_n)
@@ -212,7 +215,7 @@ if (!reset_n) begin
     sda_out   <= 1;
     scl_out   <= 1;
     
-    post_state <= state_t'('x);
+    post_state <= state_t'(S_X);
     process_counter <= 'x;
     bit_counter <= 'x;
     byte_counter <= 'x;
@@ -270,7 +273,7 @@ else if (divider_tick) // aggressive gating
                     else if (bit_counter == 1)
                         sda_out <= state==S_WRITE_ADDR_R; //cmd.read_write; // 1 = read, 0 = write
                     else
-                        sda_out <= cmd.device_address[bit_counter - 2];
+                        sda_out <= cmd.device_address >> (bit_counter - 2);
                 end
             endcase
     
@@ -334,11 +337,14 @@ else if (divider_tick) // aggressive gating
                     if (bit_counter == 0) begin
                         sda_out <= 1;
                         state <= S_CHECK_ACK;
-                        post_state <= cmd.read_write ? S_RESTART : S_WRITE_REG_DATA; // 1 = read, 0 = write
+                        if (cmd.read_write)
+                            post_state <= S_RESTART; // 1 = read, 0 = write
+                        else
+                            post_state <= S_WRITE_REG_DATA; // 1 = read, 0 = write
                         byte_counter <= cmd.num_bytes - 1;
                     end
                     else
-                        sda_out <= cmd.register_address[bit_counter - 1];
+                        sda_out <= cmd.register_address >> (bit_counter - 1);
                 end
             endcase
 
@@ -365,7 +371,10 @@ else if (divider_tick) // aggressive gating
                     if (bit_counter == 0) begin
                         sda_out <= 1;
                         state <= S_CHECK_ACK;
-                        post_state <= byte_counter == 0 ? S_SEND_STOP : S_WRITE_REG_DATA;
+                        if (byte_counter == 0)
+                            post_state <= S_SEND_STOP;
+                        else
+                            post_state <= S_WRITE_REG_DATA;
                         if (byte_counter != 0)
                             byte_counter <= byte_counter - 1;
                     end
