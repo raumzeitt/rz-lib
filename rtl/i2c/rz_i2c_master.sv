@@ -107,7 +107,7 @@ always_comb miso_ready          = ~miso_ready_n;
 sfifo 
     #(.DW($bits(s_axis_cmd_data)), .DEPTH(CMD_FIFO_DEPTH)) 
 cmd_fifo (
-    .clk(clock), .resetn(reset_n), 
+    .clk(clock), .resetn(reset_n), .rptr(), .wptr(),
     .we(s_axis_cmd_valid), .wd(s_axis_cmd_data), .full(s_axis_cmd_ready_n), 
     .re(cmd_ready), .rd(cmd_data), .empty(cmd_valid_n)
 );
@@ -115,7 +115,7 @@ cmd_fifo (
 sfifo 
     #(.DW($bits(s_axis_data)), .DEPTH(MOSI_FIFO_DEPTH)) 
 mosi_fifo (
-    .clk(clock), .resetn(reset_n), 
+    .clk(clock), .resetn(reset_n), .rptr(), .wptr(),
     .we(s_axis_data_valid), .wd(s_axis_data), .full(s_axis_data_ready_n), 
     .re(mosi_valid), .rd(mosi_data), .empty(mosi_valid_n)
 );
@@ -123,7 +123,7 @@ mosi_fifo (
 sfifo 
     #(.DW($bits(m_axis_data)), .DEPTH(MISO_FIFO_DEPTH)) 
 miso_fifo (
-    .clk(clock), .resetn(reset_n), 
+    .clk(clock), .resetn(reset_n), .rptr(), .wptr(),
     .we(miso_valid), .wd(miso_data), .full(miso_ready_n), 
     .re(m_axis_data_ready), .rd(m_axis_data), .empty(m_axis_data_valid_n)
 );
