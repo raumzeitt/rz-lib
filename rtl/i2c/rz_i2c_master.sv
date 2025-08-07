@@ -164,7 +164,7 @@ sfifo
 mosi_fifo (
     .clk(clock), .resetn(reset_n), .rptr(), .wptr(),
     .we(s_axis_data_tvalid), .wd(s_axis_data_tdata), .full(s_axis_data_tready_n), 
-    .re(mosi_valid), .rd(mosi_data), .empty(mosi_valid_n)
+    .re(mosi_ready), .rd(mosi_data), .empty(mosi_valid_n)
 );
 
 sfifo 
@@ -201,7 +201,7 @@ always_comb divider_tick = (divider_counter == 0) ;
 
 always_ff @(posedge clock or negedge reset_n)
 if (!reset_n)
-    divider_counter <= 0;
+    divider_counter <= 1;
 else
     divider_counter <= next_divider_counter;
 
@@ -254,9 +254,10 @@ always_comb begin
         next_process_counter = process_counter + 1;
         case (state)
 
-            S_IDLE: if (cmd_valid)
+            S_IDLE: if (cmd_valid) begin
                         next_state = S_START;
-
+                        next_process_counter = 0;
+                    end
             S_START:
                 case (process_counter)
                     0:  next_scl_out = 1;
@@ -315,7 +316,9 @@ always_comb begin
                             if (mosi_valid) begin
                                 next_sda_out = mosi_data[7];
                                 next_state = post_state;
-                            end
+                            end else
+                                next_process_counter = process_counter;
+                                
                 endcase
 
             S_WRITE_REG_ADDR:
@@ -388,7 +391,7 @@ always_comb begin
                         end 
                     2:  begin 
                             next_scl_out = 0;
-                            miso_data[bit_counter] = ~sda;
+                            miso_data[bit_counter] = sda;
                         end
                     3:  if (bit_counter != 0 | (!miso_valid | miso_ready)) begin //FIXME handhake
                             next_bit_counter = bit_counter - 1;
