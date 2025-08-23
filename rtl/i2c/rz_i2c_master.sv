@@ -1,4 +1,3 @@
-`timescale 1ns / 1ps
 /*
  * Authored by: Robert Metchev / Raumzeit Technologies (robert@raumzeit.co)
  *
@@ -47,7 +46,7 @@ module rz_i2c_master #(
     // AXI-Stream command input (1 word = command)
     input   logic               s_axis_cmd_tvalid,   // was enable
     output  logic               s_axis_cmd_tready,   // was busy
-    input   logic [23:0]        s_axis_cmd_tdata,    // [23:17] device_addr, [16] read_write (1 = read, 0 = write), [15:8] num_bytes, [7:0] register_addr
+    input   logic [31:0]        s_axis_cmd_tdata,    // [23:17] device_addr, [16] read_write (1 = read, 0 = write), [15:8] num_bytes, [7:0] register_addr
 
     // Write stream interface
     // AXI-Stream write data input
