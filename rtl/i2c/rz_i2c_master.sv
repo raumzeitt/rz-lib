@@ -62,6 +62,8 @@ module rz_i2c_master #(
     
 
     input   logic   [15:0]      divider,
+    output  logic               rd_done_n,
+    output  logic               wr_done_n,
 
     input   logic               sda_in,
     output  logic               sda_out,
@@ -208,13 +210,33 @@ else
 always_comb cmd_ready = (state != S_IDLE) & (next_state == S_IDLE);
 always_comb mosi_ready = divider_tick && (state == S_WRITE_REG_DATA) && (process_counter == 3) && (bit_counter == 0);
 always_ff @(posedge clock or negedge reset_n)
-if (!reset_n) 
+if (!reset_n) begin 
     miso_valid   <= 0;
-else
-    if (divider_tick && (state == S_READ_REG) && (process_counter == 2) && (bit_counter == 0)) 
+    rd_done_n <= 1;
+end
+else 
+    if (divider_tick && (state == S_READ_REG) && (process_counter == 2) && (bit_counter == 0)) begin
         miso_valid   <= 1;
-    else if (miso_ready) 
-        miso_valid   <= 0;
+        if (byte_counter == 0) rd_done_n <= 0;
+    end
+    else begin
+        if (miso_ready) 
+            miso_valid   <= 0;
+        if ((state == S_IDLE) & cmd_valid)
+            rd_done_n <= 1;
+    end
+
+always_ff @(posedge clock or negedge reset_n)
+if (!reset_n) begin 
+    wr_done_n <= 1;
+end
+else 
+    if (mosi_ready) begin
+        wr_done_n <= 0;
+    end
+    else begin
+        if ((state == S_IDLE) & cmd_valid) wr_done_n <= 1;
+    end
 
 // workaround icarus static cast issues:  state_t'(S_X);
 //wire [$bits(state_t)-1:0] S_X;
