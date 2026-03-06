@@ -138,11 +138,11 @@ logic               timeout_cycle_timer_expired;
 
 
 // synchronize SDA/SCL
-//logic sda_in_z, scl_in_z;
-//always @(posedge clock) {sda, sda_in_z} <= {sda_in_z, sda_in};
-//always @(posedge clock) {scl, scl_in_z} <= {scl_in_z, scl_in};
-always_comb sda = sda_in;
-always_comb scl = scl_in;
+logic sda_in_z, scl_in_z;
+always @(posedge clock) {sda, sda_in_z} <= {sda_in_z, sda_in};
+always @(posedge clock) {scl, scl_in_z} <= {scl_in_z, scl_in};
+//always_comb sda = sda_in;
+//always_comb scl = scl_in;
 
 // FIFOs
 always_comb s_axis_cmd_tready   = ~s_axis_cmd_tready_n;
