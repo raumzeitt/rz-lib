@@ -16,11 +16,17 @@ module sync2edge #(
     input logic clk,
     input logic rst_n,
     input logic[D-1:0] d,
-    output logic[D-1:0] q
+    output logic[D-1:0] q,
+    output logic[D-1:0] e
 );
 logic[2:0][D-1:0] q0;
-always @(posedge clk or negedge rst_n) 
+`ifdef RZ_LIB_ASYNC_RESETN
+always @(posedge clk or negedge rst_n)
+`else // RZ_LIB_ASYNC_RESETN
+always @(posedge clk)
+`endif // RZ_LIB_ASYNC_RESETN
 if(~rst_n)  q0 <= 0;
 else        q0 <= {q0, d};
-always_comb q = q0[2:1] == 1;
+always_comb q = q0[1];
+always_comb e = ~q0[2] & q0[1];
 endmodule
